@@ -10,6 +10,7 @@ plugins {
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
+    maven
 }
 
 repositories {
@@ -30,4 +31,23 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+}
+
+task("writeNewPom") {
+    doLast {
+        maven.pom {
+            withGroovyBuilder {
+                "project" {
+                    setProperty("inceptionYear", "2020")
+                    "licenses" {
+                        "license" {
+                            setProperty("name", "The Apache Software License, Version 2.0")
+                            setProperty("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
+                            setProperty("distribution", "repo")
+                        }
+                    }
+                }
+            }
+        }.writeTo("$buildDir/pom.xml")
+    }
 }
